@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BonusGranted">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="BonusStatus" Type="bit" Nullable="false" />
+          <Property Name="IdRechargeSim" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdSim" Type="int" Nullable="false" />
+          <Property Name="MinutesConsumed" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RechargeConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="PriceperMinute" Type="int" Nullable="false" />
+          <Property Name="Minutes" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RechargeSim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="IdSim" Type="int" Nullable="false" />
+          <Property Name="IdRechargeConfig" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Minutes" Type="int" Nullable="false" />
+          <Property Name="Bonus" Type="int" />
+          <Property Name="BonusMin" Type="int" />
+        </EntityType>
+        <EntityType Name="Sims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SerialNumber" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Number" Type="bigint" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Test.dbo.VwMinutesReport' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VwMinutesReport">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="bigint" Nullable="false" />
+          <Property Name="TotalMinutes" Type="int" />
+          <Property Name="MinutesConsumed" Type="int" />
+          <Property Name="MinutesLeft" Type="int" />
+        </EntityType>
+        <Association Name="FK_BonusGranted_RechargeSim">
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="1" />
+          <End Role="BonusGranted" Type="Self.BonusGranted" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RechargeSim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BonusGranted">
+              <PropertyRef Name="IdRechargeSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historial_Sims">
+          <End Role="Sims" Type="Self.Sims" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sims">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="IdSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RechargeSim_RechargeConfig">
+          <End Role="RechargeConfig" Type="Self.RechargeConfig" Multiplicity="1" />
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RechargeConfig">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RechargeSim">
+              <PropertyRef Name="IdRechargeConfig" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RechargeSim_Sims">
+          <End Role="Sims" Type="Self.Sims" Multiplicity="1" />
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sims">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RechargeSim">
+              <PropertyRef Name="IdSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestModelStoreContainer">
+          <EntitySet Name="BonusGranted" EntityType="Self.BonusGranted" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RechargeConfig" EntityType="Self.RechargeConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RechargeSim" EntityType="Self.RechargeSim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sims" EntityType="Self.Sims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VwMinutesReport" EntityType="Self.VwMinutesReport" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VwMinutesReport].[Number] AS [Number], 
+    [VwMinutesReport].[TotalMinutes] AS [TotalMinutes], 
+    [VwMinutesReport].[MinutesConsumed] AS [MinutesConsumed], 
+    [VwMinutesReport].[MinutesLeft] AS [MinutesLeft]
+    FROM [dbo].[VwMinutesReport] AS [VwMinutesReport]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_BonusGranted_RechargeSim" Association="Self.FK_BonusGranted_RechargeSim">
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+            <End Role="BonusGranted" EntitySet="BonusGranted" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historial_Sims" Association="Self.FK_Historial_Sims">
+            <End Role="Sims" EntitySet="Sims" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RechargeSim_RechargeConfig" Association="Self.FK_RechargeSim_RechargeConfig">
+            <End Role="RechargeConfig" EntitySet="RechargeConfig" />
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RechargeSim_Sims" Association="Self.FK_RechargeSim_Sims">
+            <End Role="Sims" EntitySet="Sims" />
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BonusGranted">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BonusStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IdRechargeSim" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RechargeSim" Relationship="Self.FK_BonusGranted_RechargeSim" FromRole="BonusGranted" ToRole="RechargeSim" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdSim" Type="Int32" Nullable="false" />
+          <Property Name="MinutesConsumed" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Sims" Relationship="Self.FK_Historial_Sims" FromRole="Historial" ToRole="Sims" />
+        </EntityType>
+        <EntityType Name="RechargeConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
+          <Property Name="PriceperMinute" Type="Int32" Nullable="false" />
+          <Property Name="Minutes" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RechargeSim" Relationship="Self.FK_RechargeSim_RechargeConfig" FromRole="RechargeConfig" ToRole="RechargeSim" />
+        </EntityType>
+        <EntityType Name="RechargeSim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="IdSim" Type="Int32" Nullable="false" />
+          <Property Name="IdRechargeConfig" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Minutes" Type="Int32" Nullable="false" />
+          <Property Name="Bonus" Type="Int32" />
+          <Property Name="BonusMin" Type="Int32" />
+          <NavigationProperty Name="BonusGranted" Relationship="Self.FK_BonusGranted_RechargeSim" FromRole="RechargeSim" ToRole="BonusGranted" />
+          <NavigationProperty Name="RechargeConfig" Relationship="Self.FK_RechargeSim_RechargeConfig" FromRole="RechargeSim" ToRole="RechargeConfig" />
+          <NavigationProperty Name="Sims" Relationship="Self.FK_RechargeSim_Sims" FromRole="RechargeSim" ToRole="Sims" />
+        </EntityType>
+        <EntityType Name="Sims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerialNumber" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Number" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Historial" Relationship="Self.FK_Historial_Sims" FromRole="Sims" ToRole="Historial" />
+          <NavigationProperty Name="RechargeSim" Relationship="Self.FK_RechargeSim_Sims" FromRole="Sims" ToRole="RechargeSim" />
+        </EntityType>
+        <EntityType Name="VwMinutesReport">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="Int64" Nullable="false" />
+          <Property Name="TotalMinutes" Type="Int32" />
+          <Property Name="MinutesConsumed" Type="Int32" />
+          <Property Name="MinutesLeft" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_BonusGranted_RechargeSim">
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="1" />
+          <End Role="BonusGranted" Type="Self.BonusGranted" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RechargeSim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BonusGranted">
+              <PropertyRef Name="IdRechargeSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historial_Sims">
+          <End Role="Sims" Type="Self.Sims" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sims">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="IdSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RechargeSim_RechargeConfig">
+          <End Role="RechargeConfig" Type="Self.RechargeConfig" Multiplicity="1" />
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RechargeConfig">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RechargeSim">
+              <PropertyRef Name="IdRechargeConfig" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RechargeSim_Sims">
+          <End Role="Sims" Type="Self.Sims" Multiplicity="1" />
+          <End Role="RechargeSim" Type="Self.RechargeSim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sims">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RechargeSim">
+              <PropertyRef Name="IdSim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BonusGranted" EntityType="Self.BonusGranted" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" />
+          <EntitySet Name="RechargeConfig" EntityType="Self.RechargeConfig" />
+          <EntitySet Name="RechargeSim" EntityType="Self.RechargeSim" />
+          <EntitySet Name="Sims" EntityType="Self.Sims" />
+          <EntitySet Name="VwMinutesReport" EntityType="Self.VwMinutesReport" />
+          <AssociationSet Name="FK_BonusGranted_RechargeSim" Association="Self.FK_BonusGranted_RechargeSim">
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+            <End Role="BonusGranted" EntitySet="BonusGranted" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historial_Sims" Association="Self.FK_Historial_Sims">
+            <End Role="Sims" EntitySet="Sims" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RechargeSim_RechargeConfig" Association="Self.FK_RechargeSim_RechargeConfig">
+            <End Role="RechargeConfig" EntitySet="RechargeConfig" />
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RechargeSim_Sims" Association="Self.FK_RechargeSim_Sims">
+            <End Role="Sims" EntitySet="Sims" />
+            <End Role="RechargeSim" EntitySet="RechargeSim" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestModelStoreContainer" CdmEntityContainer="TestEntities">
+          <EntitySetMapping Name="BonusGranted">
+            <EntityTypeMapping TypeName="TestModel.BonusGranted">
+              <MappingFragment StoreEntitySet="BonusGranted">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="BonusStatus" ColumnName="BonusStatus" />
+                <ScalarProperty Name="IdRechargeSim" ColumnName="IdRechargeSim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Historial">
+            <EntityTypeMapping TypeName="TestModel.Historial">
+              <MappingFragment StoreEntitySet="Historial">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdSim" ColumnName="IdSim" />
+                <ScalarProperty Name="MinutesConsumed" ColumnName="MinutesConsumed" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RechargeConfig">
+            <EntityTypeMapping TypeName="TestModel.RechargeConfig">
+              <MappingFragment StoreEntitySet="RechargeConfig">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PriceperMinute" ColumnName="PriceperMinute" />
+                <ScalarProperty Name="Minutes" ColumnName="Minutes" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RechargeSim">
+            <EntityTypeMapping TypeName="TestModel.RechargeSim">
+              <MappingFragment StoreEntitySet="RechargeSim">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="IdSim" ColumnName="IdSim" />
+                <ScalarProperty Name="IdRechargeConfig" ColumnName="IdRechargeConfig" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Minutes" ColumnName="Minutes" />
+                <ScalarProperty Name="Bonus" ColumnName="Bonus" />
+                <ScalarProperty Name="BonusMin" ColumnName="BonusMin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sims">
+            <EntityTypeMapping TypeName="TestModel.Sims">
+              <MappingFragment StoreEntitySet="Sims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VwMinutesReport">
+            <EntityTypeMapping TypeName="TestModel.VwMinutesReport">
+              <MappingFragment StoreEntitySet="VwMinutesReport">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="TotalMinutes" ColumnName="TotalMinutes" />
+                <ScalarProperty Name="MinutesConsumed" ColumnName="MinutesConsumed" />
+                <ScalarProperty Name="MinutesLeft" ColumnName="MinutesLeft" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

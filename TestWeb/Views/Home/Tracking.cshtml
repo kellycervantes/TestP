@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+ 
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/grid-0.4.3.min.css" rel="stylesheet" type="text/css">
+
+    <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/grid-0.4.3.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //var grid;
+        
+         
+
+         
+        function Loaddata() {
+          //  $('#tbsim').append().Remove();
+            $.ajax({
+                url: "http://localhost:58173/api/Tracking",
+                type: "GET",
+
+                success: function (data) {
+                   
+                    var trHTML = '';
+                    for (var i = 0; i < data.length; i++) {
+                        
+                        trHTML += "<tr><td> " + data[i].Number + "</td>     <td>" + data[i].TotalMinutes + "</td>    <td>" + data[i].MinutesUsed + "</td>     <td>   " + data[i].MinutesLeft + "</td> >/tr>";
+                      }
+                    $('#tbsimresult').html(trHTML); 
+                },
+                error: function (msg) { alert(msg.error); }
+            });
+
+        }
+         
+        $(document).ready(function () {
+            Loaddata();
+           $("#btnAddSim").on("click", Add);
+           $("#btnSave").on("click", Save);
+            // $("#btnSearch").on("click", Search);
+        });
+    </script>
+ 
+  <!-- Main content -->
+<section class="content">
+   
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> </h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            
+                            <div class="input-group-btn">
+                                <button type="button" id="btnAddSim" class="btn btn-default pull-right">Nueva Sim</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover" id="tbsim">
+                        <thead>
+                            <tr> 
+                                <th>Number</th>
+                                <th>Total Minutes </th>
+                                <th>Minutes Used</th>
+                                <th>Minutes Left</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbsimresult"></tbody> 
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+    
+ 

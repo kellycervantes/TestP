@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+ 
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/grid-0.4.3.min.css" rel="stylesheet" type="text/css">
+
+    <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/grid-0.4.3.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //var grid;
+        function Add() {
+            $("#Id").val("");
+            $("#Number").val("");
+            $("#SerialNumber").val("");
+            $("#simModal").modal("show");
+        }
+        function Edit(ID,Number,SerialNumber) {
+            debugger;
+            $("#Id").val(ID);
+            $("#Number").val(Number);
+            $("#SerialNumber").val(SerialNumber);
+            $("#simModal").modal("show");
+        }
+        
+        $("#btnSave").click(function () {
+            var sim = {
+                ID: $("#Id").val(),
+                Number: $("#Number").val(),
+                SerialNumber: $("#SerialNumber").val()
+            };
+             
+        });
+
+
+
+
+        function Save() {
+            var sim = {
+                ID: $("#Id").val(),
+                Number: $("#Number").val(),
+                SerialNumber: $("#SerialNumber").val()
+            };
+
+            $.ajax({
+                url: "http://localhost:58173/api/Sims",
+                type: "Post",
+                data: sim, 
+                success: function (data) {
+                    debugger;
+                   // $('#tbsim').empty();
+                    Loaddata();
+                    $("#simModal").modal("hide");
+                },
+                error: function () { alert('error'); }
+            });
+        }
+
+        function Remove(e) {
+            $.ajax({ url: "http://localhost:58173/api/Remove", type: "POST", data: { id: e.data.id } })
+                .done(function () {
+                    grid.reload();
+                })
+                .fail(function () {
+                    alert("Unable to remove.");
+                });
+        }
+
+
+        function Loaddata() {
+          //  $('#tbsim').append().Remove();
+            $.ajax({
+                url: "http://localhost:58173/api/Sims",
+                type: "GET",
+
+                success: function (data) {
+                   
+                    var trHTML = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var sim = {
+                            ID: data[i].ID,
+                            Number: data[i].Number,
+                            SerialNumber: data[i].SerialNumber
+                        };
+                        trHTML += "<tr><td> " + data[i].ID + "</td>     <td>" + data[i].Number + "</td>     <td>   " + data[i].SerialNumber + "</td> <td> <button type='button' class='btn btn-primary' id='bt" + i + "'  onclick =Edit(" + data[i].ID  +',' + data[i].Number +','+ '"'+ data[i].SerialNumber +'"'  + ")>Edit</button>  </td></tr>";
+                      }
+                    $('#tbsimresult').html(trHTML); 
+                },
+                error: function (msg) { alert(msg.error); }
+            });
+
+        }
+         
+        $(document).ready(function () {
+            Loaddata();
+           $("#btnAddSim").on("click", Add);
+           $("#btnSave").on("click", Save);
+            // $("#btnSearch").on("click", Search);
+        });
+    </script>
+ 
+  <!-- Main content -->
+<section class="content">
+   
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> </h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            
+                            <div class="input-group-btn">
+                                <button type="button" id="btnAddSim" class="btn btn-default pull-right">Nueva Sim</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover" id="tbsim">
+                        <thead>
+                            <tr>
+                                <th>Id </th>
+                                <th>Number</th>
+                                <th>Serial Number</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbsimresult"></tbody> 
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="simModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Sim</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" id="Id" />
+                        <div class="form-group">
+                            <label for="name">Numero</label>
+                            <input type="text" class="form-control" id="Number" placeholder="Ingrese el numero">
+                        </div>
+                        <div class="form-group">
+                            <label for="placeOfBirth">Serial</label>
+                            <input type="text" class="form-control" id="SerialNumber" placeholder="Ingrese el serial">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
