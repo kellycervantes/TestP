@@ -10,7 +10,7 @@ namespace TestP.Models
     public class RechargeSimRepository
     {
         private readonly TestEntities db = new TestEntities();
-        private HistorialRepository historial;
+    
         public List<RechargeSimC> findAll()
         {
 
