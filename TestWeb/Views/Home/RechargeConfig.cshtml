@@ -12,131 +12,115 @@
 <script src="~/Scripts/grid-0.4.3.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-        //var grid;
-        function Add() {
-            $("#Id").val("");
-            $("#Amount").val(""); 
-            $("#PriceperMinute").val("");
-            $("#Minutes").val("");
-            $("#Amount").show();
-            $("#PriceperMinute").show();
-            $("#Amountlbl").show();
-            $("#PriceperMinutelbl").show();
-             $("#Status").val("");
-            $("#Status").hide();
-            $("#Statuslbl").hide();
-            $("#rechargeConfigModal").modal("show");
-        }
+    //var grid;
+    function Add() {
+        $("#Id").val("");
+        $("#Amount").val("");
+        $("#PriceperMinute").val("");
+        $("#Minutes").val("");
+        $("#Amount").show();
+        $("#PriceperMinute").show();
+        $("#Amountlbl").show();
+        $("#PriceperMinutelbl").show();
+        $("#Status").val("");
+        $("#Status").hide();
+        $("#Statuslbl").hide();
+        $("#rechargeConfigModal").modal("show");
+    }
     function Edit(ID, Status) {
-            debugger;
-            $("#Id").val(ID);
-            $("#Amount").val(Amount); 
-            $("#Amount").hide();
-            $("#PriceperMinute").hide();
-            $("#Amountlbl").hide();
-            $("#PriceperMinutelbl").hide();
-            $("#PriceperMinute").val(PriceperMinute);
-            $("#Minutes").val(Minutes);
-            $("#Status").val(Status);
-            $("#rechargeConfigModal").modal("show");
-        }
-     
-        function Save() {
-            var sim = {
-                ID: $("#Id").val(),
-                Amount: $("#Amount").val(), 
-                PriceperMinute: $("#PriceperMinute").val(),
-                Minutes: $("#Minutes").val(),
-                Status: $("#Status").val()
+        debugger;
+        $("#Id").val(ID);
+        $("#Amount").val(Amount);
+        $("#Amount").hide();
+        $("#PriceperMinute").hide();
+        $("#Amountlbl").hide();
+        $("#PriceperMinutelbl").hide();
+        $("#PriceperMinute").val(PriceperMinute);
+        $("#Minutes").val(Minutes);
+        $("#Status").val(Status);
+        $("#rechargeConfigModal").modal("show");
+    }
 
-            };
+    function Save() {
+        var sim = {
+            ID: $("#Id").val(),
+            Amount: $("#Amount").val(),
+            PriceperMinute: $("#PriceperMinute").val(),
+            Minutes: $("#Minutes").val(),
+            Status: $("#Status").val()
 
-            $.ajax({
-                url: "http://localhost:58173/api/RechargeConfig",
-                type: "Post",
-                data: sim,
-                success: function (message) {
+        };
+
+        $.ajax({
+            url: "http://localhost:58173/api/RechargeConfig",
+            type: "Post",
+            data: sim,
+            success: function (message) {
+                debugger;
+                // $('#tbsim').empty();
+                Loaddata();
+                if (message != "Record have been saved") {
                     debugger;
-                    // $('#tbsim').empty();
+                    $("#display-success").fadeIn();
+                    $("#messagetext").text(message);
+                    window.setTimeout(function () {
+                        $("#display-success").fadeOut(300)
+                    }, 5000);
+                }
+                if (message != "Record has been disabled") {
+                    debugger;
+                    $("#display-success").fadeIn();
+                    $("#messagetext").text(message);
+                    window.setTimeout(function () {
+                        $("#display-success").fadeOut(300)
+                    }, 5000);
+                }
+                else {
                     Loaddata();
-                    if (message != "Record have been saved") {
-                        debugger;
-                        $("#display-success").fadeIn();
-                        $("#messagetext").text(message);
-                        window.setTimeout(function () {
-                            $("#display-success").fadeOut(300)
-                        }, 5000);
-                    }
-                    if (message != "Record has been disabled") {
-                        debugger;
-                        $("#display-success").fadeIn();
-                        $("#messagetext").text(message);
-                        window.setTimeout(function () {
-                            $("#display-success").fadeOut(300)
-                        }, 5000);
-                    }
-                    else {
-                        Loaddata();
-                        $("#rechargeConfigModal").modal("hide");
-                        $("#display-success2").fadeIn();
-                        $("#messagetext2").text(message);
-                        window.setTimeout(function () {
-                            $("#display-success2").fadeOut(300)
-                        }, 5000);
-                    }
-                },
-                error: function () { alert('error'); }
-            });
-        }
-
-        function Remove(e) {
-            $.ajax({ url: "http://localhost:58173/api/Remove", type: "POST", data: { id: e.data.id } })
-                .done(function () {
-                    grid.reload();
-                })
-                .fail(function () {
-                    alert("Unable to remove.");
-                });
-        }
-
-
-        function Loaddata() {
-          //  $('#tbsim').append().Remove();
-            $.ajax({
-                url: "http://localhost:58173/api/RechargeConfig",
-                type: "GET",
-
-                success: function (data) {
-
-                    var trHTML = '';
-                    for (var i = 0; i < data.length; i++) {
-                        var sim = {
-                            ID: data[i].ID,
-                            Amount: data[i].Amount,
-                            PriceperMinute: data[i].PriceperMinute,
-                            Minutes: data[i].Minutes,
-                            Status: data[i].Status
-                        };
-                        trHTML += "<tr><td> " + data[i].ID + "</td>     <td>" + data[i].Amount + "</td>     <td>   " + data[i].PriceperMinute + "</td> <td>" + data[i].Minutes + "</td > <td>" + data[i].Status + "</td > <td> <button type='button' class='btn btn-primary' id='bt" + i + "'  onclick =Edit(" + data[i].ID + ',' + '"' + data[i].Status + '"' + ")>Disable Config</button>  </td></tr>";
-                      }
-                    $('#tbsimresult').html(trHTML);
-                },
-                error: function (msg) { alert(msg.error); }
-            });
-
-        }
-
-        $(document).ready(function () {
-            Loaddata();
-           $("#btnAddSim").on("click", Add);
-           $("#btnSave").on("click", Save);
-            // $("#btnSearch").on("click", Search);
+                    $("#rechargeConfigModal").modal("hide");
+                    $("#display-success2").fadeIn();
+                    $("#messagetext2").text(message);
+                    window.setTimeout(function () {
+                        $("#display-success2").fadeOut(300)
+                    }, 5000);
+                }
+            },
+            error: function () { alert('error'); }
         });
+    }
+
+    function Loaddata() { 
+        $.ajax({
+            url: "http://localhost:58173/api/RechargeConfig",
+            type: "GET",
+            success: function (data) {
+                 var trHTML = '';
+                for (var i = 0; i < data.length; i++) {
+                    var sim = {
+                        ID: data[i].ID,
+                        Amount: data[i].Amount,
+                        PriceperMinute: data[i].PriceperMinute,
+                        Minutes: data[i].Minutes,
+                        Status: data[i].Status
+                    };
+                    trHTML += "<tr><td> " + data[i].ID + "</td>     <td>" + data[i].Amount + "</td>     <td>   " + data[i].PriceperMinute + "</td> <td>" + data[i].Minutes + "</td > <td>" + data[i].Status + "</td > <td> <button type='button' class='btn btn-primary' id='bt" + i + "'  onclick =Edit(" + data[i].ID + ',' + '"' + data[i].Status + '"' + ")>Disable Config</button>  </td></tr>";
+                }
+                $('#tbsimresult').html(trHTML);
+            },
+            error: function (msg) { alert(msg.error); }
+        });
+
+    }
+
+    $(document).ready(function () {
+        Loaddata();
+        $("#btnAddSim").on("click", Add);
+        $("#btnSave").on("click", Save);
+    });
 </script>
 
 <!-- Main content -->
 <section class="content">
-
     <!-- /.row -->
     <div class="row">
         <div class="col-xs-12">
@@ -199,11 +183,11 @@
                     </div>
                     <div class="form-group">
                         <label for="placeOfBirth" id="Statuslbl">Status</label>
-                        <select  class="form-control" id="Status" placeholder="">
+                        <select class="form-control" id="Status" placeholder="">
                             <option value="D">Disable</option>
                         </select>
                     </div>
-                     
+
                 </form>
             </div>
             <div id="display-success" class="callout callout-info" style="display:none;"> <label id="messagetext"></label></div>

@@ -26,19 +26,7 @@
             $("#SerialNumber").val(SerialNumber);
             $("#simModal").modal("show");
         }
-        
-        $("#btnSave").click(function () {
-            var sim = {
-                ID: $("#Id").val(),
-                Number: $("#Number").val(),
-                SerialNumber: $("#SerialNumber").val()
-            };
-             
-        });
-
-
-
-
+         
         function Save() {
             var sim = {
                 ID: $("#Id").val(),
@@ -60,16 +48,7 @@
             });
         }
 
-        function Remove(e) {
-            $.ajax({ url: "http://localhost:58173/api/Remove", type: "POST", data: { id: e.data.id } })
-                .done(function () {
-                    grid.reload();
-                })
-                .fail(function () {
-                    alert("Unable to remove.");
-                });
-        }
-
+         
 
         function Loaddata() {
           //  $('#tbsim').append().Remove();
@@ -98,8 +77,7 @@
         $(document).ready(function () {
             Loaddata();
            $("#btnAddSim").on("click", Add);
-           $("#btnSave").on("click", Save);
-            // $("#btnSearch").on("click", Search);
+           $("#btnSave").on("click", Save); 
         });
     </script>
  

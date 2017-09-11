@@ -12,7 +12,6 @@ namespace TestP.Models
         public int PriceperMinute { get; set; }
         public int Minutes { get; set; }
         public string Status { get; set; }
-        public string message { get; set; }
-        //  public virtual ICollection<RechargeSim> RechargeSim { get; set; }
+        public string message { get; set; } 
     }
 }

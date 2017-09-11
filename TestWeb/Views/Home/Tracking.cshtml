@@ -12,13 +12,9 @@
     <script src="~/Scripts/grid-0.4.3.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        //var grid;
-        
          
-
          
-        function Loaddata() {
-          //  $('#tbsim').append().Remove();
+        function Loaddata() { 
             $.ajax({
                 url: "http://localhost:58173/api/Tracking",
                 type: "GET",
@@ -40,8 +36,7 @@
         $(document).ready(function () {
             Loaddata();
            $("#btnAddSim").on("click", Add);
-           $("#btnSave").on("click", Save);
-            // $("#btnSearch").on("click", Search);
+           $("#btnSave").on("click", Save); 
         });
     </script>
  
@@ -57,9 +52,6 @@
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
                             
-                            <div class="input-group-btn">
-                                <button type="button" id="btnAddSim" class="btn btn-default pull-right">Nueva Sim</button>
-                            </div>
                         </div>
                     </div>
                 </div>

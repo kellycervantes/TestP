@@ -18,12 +18,6 @@ namespace TestP.Controllers
             return rechargesimRep.findAll();
         }
 
-        // GET: api/RechargeSim/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
         // POST: api/RechargeSim
         public string Post([FromBody]RechargeSimC rechargesim)
         {
@@ -31,12 +25,6 @@ namespace TestP.Controllers
             return rechargesim.message;
         }
 
-
-        // PUT: api/RechargeSim/5
-        //public IEnumerable<RechargeConfigC> GetListRechargeConfig()
-        //{
-        //    return rechargesimRep.GetList();
-        //}
 
         // DELETE: api/RechargeSim/5
         public void Delete(int id)

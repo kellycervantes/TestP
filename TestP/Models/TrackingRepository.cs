@@ -12,16 +12,14 @@ namespace TestP.Models
         public List<Tracking> findAll()
         {
 
-            var records = (from report in db.VwMinutesReport  
+            var records = (from report in db.VwMinutesReport
                            select new Tracking
                            {
-                               Number= report.Number,
+                               Number = report.Number,
                                TotalMinutes = report.TotalMinutes,
-                               MinutesUsed = report.MinutesConsumed, 
-                                MinutesLeft = report.MinutesLeft
+                               MinutesUsed = report.MinutesConsumed,
+                               MinutesLeft = report.MinutesLeft
                            }).Distinct().AsQueryable();
-
-
 
             return records.ToList();
         }

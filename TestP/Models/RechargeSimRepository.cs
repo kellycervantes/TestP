@@ -28,28 +28,7 @@ namespace TestP.Models
                                Status = rs.Status
                            }).AsQueryable();
 
-            //if (!string.IsNullOrWhiteSpace(searchString))
-            //{
-            //    records = records.Where(p => p.Number.ToString().Contains(searchString) );
-            //}
 
-            //if (!string.IsNullOrEmpty(sortBy) && !string.IsNullOrEmpty(direction))
-            //{
-            //    if (direction.Trim().ToLower() == "asc")
-            //    {
-            //        records = SortHelper.OrderBy(records, sortBy);
-            //    }
-            //    else
-            //    {
-            //        records = SortHelper.OrderByDescending(records, sortBy);
-            //    }
-            //}
-
-            //if (page.HasValue && limit.HasValue)
-            //{
-            //    int start = (page.Value - 1) * limit.Value;
-            //    records = records.OrderBy(x => x.ID).Skip(start).Take(limit.Value);
-            //}
 
             return records.ToList();
         }
@@ -79,8 +58,8 @@ namespace TestP.Models
             try
             {
 
-                found  = db.Sims.Where(x => x.Number == rechargesim.Number).Count();
-               
+                found = db.Sims.Where(x => x.Number == rechargesim.Number).Count();
+
                 if (found == 0)
                 {
                     rechargesim.message = "Mobile Number is not found";
@@ -95,7 +74,7 @@ namespace TestP.Models
                 if (rechargesim.countRecharge != 0)
                 {
                     rechargesim.averageRecharge = db.RechargeSim.Where(x => x.IdSim == rechargesim.searchIdSim).Average(x => x.Amount);
-                    rechargesim.rechargeMinimum = db.RechargeSim.Min(x=>x.RechargeConfig.Amount);
+                    rechargesim.rechargeMinimum = db.RechargeSim.Min(x => x.RechargeConfig.Amount);
                     int days = DateTime.Now.DayOfWeek - DayOfWeek.Sunday;
                     DateTime weekStart = DateTime.Now.AddDays(-days);
                     DateTime weekEnd = weekStart.AddDays(6);
@@ -121,7 +100,7 @@ namespace TestP.Models
 
                 if (rechargesim.ID == 0)
                 {
-                    RechargeSim  xrechargesim = new RechargeSim();
+                    RechargeSim xrechargesim = new RechargeSim();
                     xrechargesim.BonusMin = rechargesim.Bonus / rechargesim.priceperminutesearch;
                     xrechargesim.Minutes = searchConfig.Minutes + Convert.ToInt32(xrechargesim.BonusMin);
                     xrechargesim.Amount = searchConfig.Amount + Convert.ToInt32(rechargesim.Bonus); ;
@@ -133,7 +112,7 @@ namespace TestP.Models
                     db.RechargeSim.Add(xrechargesim);
                     rechargesim.message = "Your recharge was successful!";
                 }
-               db.SaveChanges();
+                db.SaveChanges();
                 if (rechargesim.Bonus != null)
                 {
                     var bonusGranted = new BonusGranted();
@@ -142,19 +121,18 @@ namespace TestP.Models
                     bonusGranted.BonusStatus = true;
                     db.BonusGranted.Add(bonusGranted);
                     db.SaveChanges();
-                  
+
                 }
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 string error = "";
                 error = ex.Message;
             }
-        //}
 
 
 
-        
 
+        }
     }
-}
 }
