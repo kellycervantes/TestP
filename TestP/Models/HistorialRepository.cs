@@ -11,6 +11,11 @@ namespace TestP.Models
     {
 
         private readonly TestEntities db = new TestEntities();
+
+        /// <summary>
+        /// Listar llamada
+        /// </summary>
+        /// <returns></returns>
         public List<HistorialC> findAll()
         {
             var records = (from p in db.Historial
@@ -26,6 +31,10 @@ namespace TestP.Models
         }
 
 
+        /// <summary>
+        /// Guardar llamada
+        /// </summary>
+        /// <param name="historial"></param>
         public void Save(HistorialC historial)
         {
             var countminuteConsumed = 0;
@@ -34,6 +43,11 @@ namespace TestP.Models
             var found = 0;
 
             Sims searchSim = db.Sims.FirstOrDefault(x => x.Number == historial.Number);
+            if (searchSim == null) {
+                historial.message = "Mobile Number is not found";
+                return;
+
+            }
             found = searchsim(searchSim.Id);
             if (found == 0)
             {

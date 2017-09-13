@@ -11,6 +11,10 @@ namespace TestP.Models
     {
 
         private readonly TestEntities db = new TestEntities();
+        /// <summary>
+        /// Listas Sims registradas
+        /// </summary>
+        /// <returns></returns>
         public List<SimsC> findAll()
         {
 
@@ -26,7 +30,10 @@ namespace TestP.Models
             return records.ToList();
         }
 
-
+        /// <summary>
+        /// Guardar Sims 
+        /// </summary>
+        /// <param name="sim"></param>
         public void Save(SimsC sim)
         {
 
@@ -63,19 +70,7 @@ namespace TestP.Models
         }
 
 
-
-        public void Remove(int id)
-        {
-
-            var xsim = (from p in db.Sims
-                        where p.Id == id
-                        select p).FirstOrDefault();
-            if (xsim != null)
-            {
-                db.Sims.Remove(xsim);
-                db.SaveChanges();
-            }
-        }
+         
 
     }
 }

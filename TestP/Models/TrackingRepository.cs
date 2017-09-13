@@ -9,6 +9,11 @@ namespace TestP.Models
     public class TrackingRepository
     {
         private readonly TestEntities db = new TestEntities();
+
+        /// <summary>
+        /// Mostrar consulta minutos totales, consumidos y los que quedan
+        /// </summary>
+        /// <returns></returns>
         public List<Tracking> findAll()
         {
 

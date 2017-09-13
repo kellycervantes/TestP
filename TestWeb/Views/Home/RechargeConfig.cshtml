@@ -59,15 +59,8 @@
                 debugger;
                 // $('#tbsim').empty();
                 Loaddata();
-                if (message != "Record have been saved") {
-                    debugger;
-                    $("#display-success").fadeIn();
-                    $("#messagetext").text(message);
-                    window.setTimeout(function () {
-                        $("#display-success").fadeOut(300)
-                    }, 5000);
-                }
-                if (message != "Record has been disabled") {
+                
+                if (message != "Record has been disabled" && message!= "Record have been saved" ) {
                     debugger;
                     $("#display-success").fadeIn();
                     $("#messagetext").text(message);

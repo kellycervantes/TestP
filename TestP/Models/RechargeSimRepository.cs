@@ -11,6 +11,10 @@ namespace TestP.Models
     {
         private readonly TestEntities db = new TestEntities();
     
+        /// <summary>
+        /// Listar Todas las sims
+        /// </summary>
+        /// <returns></returns>
         public List<RechargeSimC> findAll()
         {
 
@@ -49,7 +53,7 @@ namespace TestP.Models
         }
 
         /// <summary>
-        /// Guardar la recarga, si es mayor a el promedio, entonces agregar el 10% del valor que van a recargar
+        /// Guardar la recarga, si es mayor al promedio, entonces agregar el 10% del valor que van a recargar en la tabla Bonus Granted
         /// </summary>
         /// <param name="rechargesim"></param>
         public void Save(RechargeSimC rechargesim)

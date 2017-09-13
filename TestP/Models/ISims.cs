@@ -10,6 +10,6 @@ namespace TestP.Models
     {
         List<SimsC> findAll();
         void Save(SimsC sim);
-        void Remove(int id);
+      //  void Remove(int id);
     }
 }

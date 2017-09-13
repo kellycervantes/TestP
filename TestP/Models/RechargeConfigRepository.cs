@@ -25,6 +25,11 @@ namespace TestP.Models
             return records.ToList();
         }
 
+
+        /// <summary>
+        /// Guardar la configuración de la recarga
+        /// </summary>
+        /// <param name="rechargeconf"></param>
         public void Save(RechargeConfigC rechargeconf)
         {
 
@@ -85,6 +90,10 @@ namespace TestP.Models
 
         }
 
+        /// <summary>
+        /// Agregar nuevo registro
+        /// </summary>
+        /// <param name="rechargeconf"></param>
         public void addNewRecord(RechargeConfigC rechargeconf)
         {
             RechargeConfig newrecord = new RechargeConfig();
